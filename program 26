@@ -1,0 +1,19 @@
+import nltk
+from nltk import Nonterminal, PCFG
+grammar=PCFG.fromstring("""
+S -> NP VP [1.0]
+NP -> Det N [0.6] | N [0.4]
+VP -> V NP [1.0]
+Det -> 'the' [0.8] | 'a' [0.2]
+N -> 'cat' [0.5] | 'dog' [0.5]
+V -> 'chased' [1.0]
+""")
+sent="the cat chased the dog".split()
+viterbi=nltk.ViterbiParser(grammar)
+for tree in viterbi.parse(sent):
+    print(tree)
+
+
+output:
+ (NP (Det the) (N cat))
+  (VP (V chased) (NP (Det the) (N dog)))) (p=0.0576)
