@@ -1,0 +1,11 @@
+from nltk.tokenize import sent_tokenize 
+from sentence_transformers import SentenceTransformer, util 
+model = SentenceTransformer('all-MiniLM-L6-v2') 
+text = "Artificial Intelligence is transforming the world. It helps machines learn from data. Bananasentences = sent_tokenize(text) 
+embeddings = model.encode(sentences) 
+similarities = [util.cos_sim(embeddings[i], embeddings[i + 1]).item() for i in range(len(embeddings)coherence_score = sum(similarities) / len(similarities) 
+print("Coherence Score:", round(coherence_score, 3)) 
+
+
+output:
+Coherence Score: 0.42 
