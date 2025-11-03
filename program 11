@@ -1,0 +1,78 @@
+from nltk import Tree
+grammar = {
+    'S': [('NP', 'VP')],
+    'NP': [('Det', 'N')],
+    'VP': [('V', 'NP')],
+    'Det': [('the',), ('a',)],
+    'N': [('cat',), ('dog',)],
+    'V': [('chased',), ('saw',)]
+}
+
+class TopDownParser:
+    def __init__(self, grammar):
+        self.grammar = grammar
+
+    def parse(self, tokens, symbol):
+        if not tokens and symbol not in self.grammar:
+            return []
+        if symbol not in self.grammar:
+            if tokens and tokens[0] == symbol:
+                return [((symbol, []), tokens[1:])]
+            else:
+                return []
+        results = []
+        for prod in self.grammar[symbol]:
+            rem = [tokens]
+            trees = [[]]
+            for sym in prod:
+                newrem = []
+                newtrees = []
+                for r, tacc in zip(rem, trees):
+                    res = self.parse(r, sym)
+                    for tree, r2 in res:
+                        newrem.append(r2)
+                        newtrees.append(tacc + [(sym, tree)])
+                rem = newrem
+                trees = newtrees
+            for t, r2 in zip(trees, rem):
+                results.append(((symbol, t), r2))
+        return results
+def to_nltk_tree(tree_tuple):
+    symbol, children = tree_tuple
+    if not children:
+        return Tree(symbol, [])
+    subtrees = []
+    for sym, child in children:
+        if isinstance(child, tuple):
+            subtrees.append(to_nltk_tree(child))
+        else:
+            subtrees.append(Tree(sym, [child]))
+    return Tree(symbol, subtrees)
+tokens = "the cat saw a dog".split()
+parser = TopDownParser(grammar)
+result = parser.parse(tokens, 'S')
+if result:
+    print("✅ Parse successful! Displaying tree...\n")
+    nltk_tree = to_nltk_tree(result[0][0])
+    nltk_tree.pretty_print()  
+    nltk_tree
+else:
+    print("⚠️ No valid parse found.")
+
+
+
+
+output:
+✅ Parse successful! Displaying tree...
+
+             S
+      _______|___
+     |           VP
+     |        ___|___
+     NP      |       NP
+  ___|___    |    ___|___
+Det      N   V  Det      N
+ |       |   |   |       |
+the     cat saw  a      dog
+ |       |   |   |       |
+...     ... ... ...     ...
