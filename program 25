@@ -1,0 +1,20 @@
+from nltk.wsd import lesk
+from nltk.corpus import wordnet
+
+sentence = "He went to the bank to deposit his money"
+word = "bank"
+
+sense = lesk(sentence.split(), word)
+
+print("=== Lesk Algorithm ===")
+print("Sentence:", sentence)
+print("Target Word:", word)
+print("Best Sense Synset:", sense)
+print("Definition:", sense.definition())
+
+
+output:
+Sentence: He went to the bank to deposit his money
+Target Word: bank
+Best Sense Synset: Synset('depository_financial_institution.n.01')
+Definition: a financial institution that accepts deposits and channels the money into lending activities
