@@ -1,0 +1,11 @@
+import spacy 
+import neuralcoref 
+nlp = spacy.load('en_core_web_sm') 
+neuralcoref.add_to_pipe(nlp) 
+text = "John said he would help Mary because he likes her." 
+doc = nlp(text) 
+print("Resolved Text:", doc._.coref_resolved) 
+
+
+output:
+Resolved Text: John said John would help Mary because John likes Mary.
