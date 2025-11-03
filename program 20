@@ -1,0 +1,15 @@
+from transformers import pipeline 
+classifier = pipeline("text-classification", model="microsoft/DialogRPT-updown") 
+dialogs = [ 
+ "Hello, how are you?", 
+ "I'm good, thank you!", 
+ "Can you help me with my assignment?", 
+ "Sure, I can help you with that." 
+] 
+for d in dialogs: 
+ print(d, "->", classifier(d)[0]) 
+
+
+output:
+Hello, how are you? -> {'label': 'UP', 'score': 0.84} 
+Can you help me with my assignment? -> {'label': 'UP', 'score': 0.77} 
