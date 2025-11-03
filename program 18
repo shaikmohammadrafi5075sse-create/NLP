@@ -1,0 +1,13 @@
+import re
+
+def parse_fopc(expression):
+    print("=== FOPC Parser ===")
+    tokens = re.findall(r'[A-Za-z]+|\(|\)|,|¬|∧|∨|→|∀|∃', expression)
+    print("Tokens:", tokens)
+
+expr = "∀x (Human(x) → Mortal(x))"
+parse_fopc(expr)
+
+
+output:
+Tokens: ['∀', 'x', '(', 'Human', '(', 'x', ')', '→', 'Mortal', '(', 'x', ')', ')']
